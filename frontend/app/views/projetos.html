@@ -1,0 +1,23 @@
+<div class="panel panel-default">
+    <div class="panel-heading panel-heading-custom">Projetos</div>
+    <div class="panel-body">
+        <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th style="width:25%">Nome</th>
+                    <th style="width:15%">Data de início</th>
+                    <th style="width:15%">Data de fim</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="projeto in projetos" ng-click="edita(projeto)">
+                    <td>{{ projeto.nome }}</td>
+                    <td>{{ projeto.dataInicio | date : 'dd/MM/yyyy'}}</td>
+                    <td>{{ projeto.dataFim | date : 'dd/MM/yyyy'}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button style="margin: 10px" type="button" class="btn btn-default" ng-click="add()">Adicionar projeto</button>
+    </div>
+</div>
+</div>

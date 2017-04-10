@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{ usuario.postoGrad.nome + ' ' + usuario.nomeGuerra}}</h3>
+</div>
+<div class="modal-body">
+
+    <uib-tabset active="activeJustified" justified="true" class="tab-style">
+
+        <uib-tab index="1" heading="Informações do usuário" style="padding-bottom: 20px">
+            <form class="form-horizontal" role="form" name="criaUsuarioForm">
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Nome</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Nome" ng-model="usuario.nome" required>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-disabled="criaUsuarioForm.$invalid" type="button" ng-click="finaliza()">Finaliza</button>
+                <button class="btn btn-default" type="button" ng-click="cancel()">Cancela</button>
+            </div>
+        </uib-tab>
+
+        <uib-tab index="2" heading="Senha" style="padding-bottom: 20px">
+            <form class="form-horizontal" role="form" name="senhaForm">
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Nova senha</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id='pw1' name='pw1' placeholder="Senha" ng-model="usuario.senha" ng-required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Confirme a senha</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id='pw2' name='pw2' placeholder="Confirme a senha" ng-model="pwd" pw-check='pw1'
+                            ng-required>
+                    </div>
+                </div>
+                <div class='msg-block' ng-show='senhaForm.$error'>
+                    <span class='msg-error' style='color: red;' ng-show='senhaForm.pw2.$error.pwmatch'>
+                    As senhas devem ser iguais.
+                </span>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-disabled="senhaForm.$invalid" type="button" ng-click="finalizaSenha()">Finaliza</button>
+                <button class="btn btn-default" type="button" ng-click="cancel()">Cancela</button>
+            </div>
+        </uib-tab>
+
+    </uib-tabset>
+
+</div>

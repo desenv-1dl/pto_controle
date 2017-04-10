@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">Nova Atividade</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" role="form" name="criaativEspForm">
+        <div class="form-group">
+            <label class="control-label col-sm-2">Tipo Atividade</label>
+            <div class="col-sm-10">
+                <select ng-model="atividadeEspecial.tipoAtividadeEspecial" ng-options="item.nome for item in tipoatividadesespecial" required></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Regime</label>
+            <div class="col-sm-10">
+                <select ng-model="atividadeEspecial.regime" ng-options="regime for regime in regimes" required></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Atividade técnica</label>
+            <div class="col-sm-10">
+                <select ng-model="atividadeTecnica" required>
+            <option value="sim">Sim</option>
+            <option value="nao">Não</option>
+          </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Observações</label>
+            <div class="col-sm-10">
+                <textarea type="text" class="form-control" placeholder="Observações" ng-model="atividadeEspecial.observacao"></textarea>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="criaativEspForm.$invalid" type="button" ng-click="finaliza()">Finaliza</button>
+        <button class="btn btn-default" type="button" ng-click="cancel()">Cancela</button>
+    </div>
+</div>

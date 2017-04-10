@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+    <div class="panel-heading panel-heading-custom">Definir funções dos usuários</div>
+    <div class="panel-body">
+        <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th style="width:10%">Posto/Grad</th>
+                    <th style="width:15%">Nome</th>
+                    <th style="width:15%">Perfil</th>
+                    <th style="width:60%">Funções</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="usuario in usuarios" ng-click="editaUsuario(usuario)">
+                    <td>{{ usuario.postoGrad.nome }}</td>
+                    <td>{{ usuario.nomeGuerra }}</td>
+                    <td>{{ usuario.perfil.nome }}</td>
+                    <td>{{ usuario.funcoesLista }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>

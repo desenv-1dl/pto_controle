@@ -1,0 +1,6 @@
+{
+  "port": 3008,
+  "connectionStringSdt": "postgres://cprod:cprod@10.25.163.9:5434/sdt",
+  "connectionStringAcervo": "postgres://cprod:cprod@10.25.163.9:5434/acervo",
+  "secret": "tassofragoso"
+}

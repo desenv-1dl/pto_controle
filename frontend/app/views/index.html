@@ -1,0 +1,68 @@
+<nav class="navbar navbar-fixed-top topnavbar">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="pull-left"><img src="icons/simbolo_1dl_small.svg" style="max-width:30px; margin-left:30px"></a>
+      <a class="navbar-brand nonSelectableText nome_principal">Sistema de Gerenciamento de Pontos de Controle 1ºCGEO</a>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">
+                        <strong style="margin-right: 5px; color: white">{{ usuario.postoGrad.nome }} {{ usuario.nomeGuerra }}</strong>
+                        <span class="glyphicon glyphicon-off" style="color: white"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li  class="navbar-login-session-bg">
+                            <div class="navbar-login">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                        <p class="text-left"><strong>{{ usuario.postoGrad.nome }} {{ usuario.nomeGuerra }}</strong></p>
+                                        <p class="text-left small">{{ usuario.perfil.nome }}</p>
+                                        <p class="text-left">
+                                            <button ng-click="perfil()" class="btn btn-primary btn-block btn-sm">Perfil</button>
+                                        </p>
+                                  </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider navbar-login-session-bg"></li>
+                        <li class="navbar-login-session-bg">
+                            <div class="navbar-login navbar-login-session">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <p>
+                                            <button ng-click="logout()" class="btn btn-danger btn-block">Sair</button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-sm-3 col-md-2 sidebar">
+      <div id="side-menu">
+        <ul>
+          <li ng-click="abaAtiva = 'visualizacao'"><a href="">Visualização</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <div ng-switch="abaAtiva">
+        <div ng-switch-when="visualizacao" ng-controller="visualizacaoCtrl">
+          <div ng-include src="'app/views/visualizacao.html'"></div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

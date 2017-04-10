@@ -1,0 +1,139 @@
+<div class="modal-header">
+  <h3 class="modal-title">Novo Projeto</h3>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal" role="form" name="criaprojetoForm">
+    <div ng-show="page == 1">
+      <h4 class="modal-title">Informações gerais</h4>
+      <br>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Nome</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="nome" placeholder="Nome do projeto" ng-model="projeto.nome" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Servidor PostGIS</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="servidor" placeholder="Endereço do servidor PostGIS" ng-model="projeto.servidorPg"
+            required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Porta do servidor PostGIS</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="porta" placeholder="Porta do servidor PostGIS" ng-model="projeto.portaPg" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Pasta de insumos</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="insumos" placeholder="Pasta com insumos do projeto" ng-model="projeto.insumosPath"
+            required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Subfases</label>
+        <div class="col-sm-10">
+          <ui-select multiple ng-model="projeto.subfases" theme="bootstrap" style="width: 400px;">
+            <ui-select-match placeholder="Selecione as subfases do projeto">{{$item.nome}} - {{$item.fase.nome}}</ui-select-match>
+            <ui-select-choices repeat="subfase in subfases | propsFilter: {nome: $select.search}">
+              <small>
+                    {{subfase.nome}} - {{subfase.fase.nome}}
+                  </small>
+            </ui-select-choices>
+          </ui-select>
+
+        </div>
+      </div>
+    </div>
+    <div ng-show="page == 2">
+      <h4 class="modal-title">Pré-requisitos de cada subfase</h4>
+      <br>
+      <div class="form-group" ng-repeat="s in projeto.subfases">
+        <label class="control-label col-sm-2">{{s.nome}} - {{s.fase.nome}}</label>
+        <div class="col-sm-10">
+          <ui-select multiple ng-model="s.preRequisitos" theme="bootstrap" style="width: 400px;">
+            <ui-select-match placeholder="Selecione as subfases do projeto">{{$item.nome}} - {{$item.fase.nome}}</ui-select-match>
+            <ui-select-choices repeat="subfase in subfases | propsFilter: {nome: $select.search}">
+              <small>
+                    {{subfase.nome}} - {{subfase.fase.nome}}
+                  </small>
+            </ui-select-choices>
+          </ui-select>
+
+        </div>
+      </div>
+    </div>
+    <div ng-show="page == 3">
+      <h4 class="modal-title">Cartas do projeto</h4>
+      <br>
+      <div class="form-group">
+        <label class="control-label col-sm-2">MI</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="Pesquisa por MI" ng-model="miAdd" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">Escala</label>
+        <div class="col-sm-10">
+          <select ng-model="escala" ng-options="e for e in escalas" required></select>
+        </div>
+      </div>
+      <br>
+      <button class="btn btn-primary" type="button" ng-click="pesquisaMi()">Buscar</button>
+
+      <div class="panel panel-default" style="margin-top: 1em" ng-show="listaBuscaMi.length > 0">
+        <div class="panel-body">
+          <table class="table table-hover table-responsive" width="100%">
+            <thead>
+              <tr>
+                <th>MI</th>
+                <th>INOM</th>
+                <th>ASC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="moldura in listaBuscaMi | orderBy:'mi' track by $index" ng-click="addMi(moldura)">
+                <td>{{ moldura.mi }}</td>
+                <td>{{ moldura.inom }}</td>
+                <td>{{ moldura.areaSuprimento }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel panel-default" style="margin-top: 1em">
+        <div class="panel-heading">MI Adicionados</div>
+        <div class="panel-body">
+          <div ng-show="projeto.tarefas.length > 0">
+            <table class="table table-hover table-responsive" width="100%">
+              <thead>
+                <tr>
+                  <th>MI</th>
+                  <th>INOM</th>
+                  <th>Escala</th>
+                  <th>ASC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="tarefa in projeto.tarefas | orderBy: 'escala' track by $index" ng-click="removeMi(tarefa)">
+                  <td>{{ tarefa.mi }}</td>
+                  <td>{{ tarefa.inom }}</td>
+                  <td>{{ tarefa.escala }}</td>
+                  <td>{{ tarefa.areaSuprimento }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="criaProjetoForm.$invalid" type="button" ng-click="anterior()" ng-show="page != 1">Anterior</button>
+    <button class="btn btn-primary" ng-disabled="criaProjetoForm.$invalid" type="button" ng-click="proximo()" ng-show="page != 3">Próximo</button>
+    <button class="btn btn-primary" ng-disabled="criaProjetoForm.$invalid" type="button" ng-click="finaliza()" ng-show="page == 3">Finaliza</button>
+    <button class="btn btn-default" type="button" ng-click="cancel()">Cancela</button>
+  </div>
+</div>

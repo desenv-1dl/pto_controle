@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h3 class="modal-title">Inicia atividade</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" role="form" name="criaativEspForm">
+        <div class="form-group">
+            <label class="control-label col-sm-2">Regime</label>
+            <div class="col-sm-10">
+                <select ng-model="registro.regime.id" ng-options="regime.id as regime.nome for regime in regimes" required></select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-disabled="criaativEspForm.$invalid" type="button" ng-click="finaliza()">Finaliza</button>
+            <button class="btn btn-default" type="button" ng-click="cancel()">Cancela</button>
+        </div>
+</div>

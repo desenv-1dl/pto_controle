@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <h3 class="modal-title">Novo Usuário</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" role="form" name="criaUsuarioForm">
+        <div class="form-group">
+            <label class="control-label col-sm-2">Login</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="login" placeholder="Login" ng-model="usuario.login" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Senha</label>
+            <div class="col-sm-10">
+                <input type="password" name="password" class="form-control" placeholder="Senha" ng-model="usuario.senha" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Nome</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="Nome" ng-model="usuario.nome" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Nome de Guerra</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="Nome de Guerra" ng-model="usuario.nomeGuerra" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Posto Grad</label>
+            <div class="col-sm-10">
+                <select ng-model="usuario.postoGrad.id" ng-options="postoGrad.id as postoGrad.nome for postoGrad in postGrads" required></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Turno</label>
+            <div class="col-sm-10">
+                <select ng-model="usuario.turno.id" ng-options="turno.id as turno.nome for turno in turnos" required></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Perfil</label>
+            <div class="col-sm-10">
+                <select ng-model="usuario.perfil.id" ng-options="perfil.id as perfil.nome for perfil in tiposPerfil" required></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Seção</label>
+            <div class="col-sm-10">
+                <select ng-model="usuario.secao.id" ng-options="secao.id as secao.nome for secao in secoes" required></select>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="criaUsuarioForm.$invalid" type="button" ng-click="finaliza()">Finaliza</button>
+        <button class="btn btn-default" type="button" ng-click="cancel()">Cancela</button>
+    </div>
+</div>

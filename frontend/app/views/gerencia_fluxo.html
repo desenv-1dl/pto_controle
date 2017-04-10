@@ -1,0 +1,127 @@
+<uib-tabset active="activeJustified" justified="true" class="tab-style">
+
+    <uib-tab index="1" heading="Atividades iniciadas">
+
+        <div class="panel panel-default" style="margin-top: 1em">
+            <div class="panel-heading panel-heading-custom">Atividades em execução</div>
+            <div class="panel-body">
+                <div ng-show="atividadeEmExecucaoSecao.length > 0">
+                <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:20%">MI</th>
+                            <th style="width:20%">Subfase</th>
+                            <th style="width:20%">Projeto</th>
+                            <th style="width:30%">Operador</th>
+                            <th style="width:5%">Tempo total (horas)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ativExec in atividadeEmExecucaoSecao track by $index">
+                            <td>{{ ativExec.miText }}</td>
+                            <td>{{ ativExec.operador.postoGrad.nome + ' ' + ativExec.operador.nomeGuerra }}</td>
+                            <td>{{ ativExec.atividadeProducao.subfase.nome }}</td>
+                            <td>{{ ativExec.atividadeProducao.tarefas[0].projeto.nome }}</td>
+                            <td>{{ ativExec.tempoRegistro }}</td>
+                        </tr>
+                    </tbody>
+                </table> 
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-top: 1em">
+            <div class="panel-heading panel-heading-custom">Atividades iniciadas</div>
+            <div class="panel-body">
+                <div ng-show="atividadePausadasSecao.length > 0">
+                <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:20%">MI</th>
+                            <th style="width:20%">Subfase</th>
+                            <th style="width:20%">Projeto</th>
+                            <th style="width:30%">Operador</th>
+                            <th style="width:5%">Tempo total (horas)</th>
+                            <th style="width:5%">Nº operadores</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ativPause in atividadePausadasSecao track by $index">
+                            <td>{{ ativPause.miText }}</td>
+                            <td>{{ ativPause.operadorText }}</td>
+                            <td>{{ ativPause.subfase.nome }}</td>
+                            <td>{{ ativPause.tarefas[0].projeto.nome }}</td>
+                            <td>{{ ativPause.horasTrabalhadas }}</td>
+                            <td>{{ ativPause.maxOperadores }}</td>
+                        </tr>
+                    </tbody>
+                </table>  
+                </div>
+            </div>
+        </div>
+
+    </uib-tab>
+
+    <uib-tab index="2" heading="Atividades não iniciadas">
+
+        <div class="panel panel-default" style="margin-top: 1em">
+            <div class="panel-heading panel-heading-custom">Atividades distribuídas</div>
+            <div class="panel-body">
+                <div ng-show="atividadeDistribuidaSecao.length > 0">
+                <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">Prioridade</th>
+                            <th style="width:20%">MI</th>
+                            <th style="width:20%">Subfase</th>
+                            <th style="width:20%">Projeto</th>
+                            <th style="width:30%">Operadores</th>
+                            <th style="width:5%">Nº operadores</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ativDist in atividadeDistribuidaSecao | orderBy: 'prioridade'  track by $index" ng-click="distribuiAtiv(ativDist)">
+                            <td>{{ ativDist.prioridade }}</td>
+                            <td>{{ ativDist.miText }}</td>
+                            <td>{{ ativDist.subfase.nome }} ({{ ativDist.subfase.fase.nome }})</td>
+                            <td>{{ ativDist.tarefas[0].projeto.nome }}</td>
+                            <td>{{ ativDist.usuariosTexto }}</td>
+                            <td>{{ ativDist.maxOperadores }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-top: 1em">
+            <div class="panel-heading panel-heading-custom">Atividades não distribuídas</div>
+            <div class="panel-body">
+                <div ng-show="atividadeNaoDistribuidaSecao.length > 0">
+                <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:40%">MI</th>
+                            <th style="width:30%">Subfase</th>
+                            <th style="width:25%">Projeto</th>
+                            <th style="width:5%">Nº operadores</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ativNaoDist in atividadeNaoDistribuidaSecao | orderBy: 'prioridade'  track by $index" ng-click="distribuiAtiv(ativNaoDist)">
+                            <td>{{ ativNaoDist.miText }}</td>
+                            <td>{{ ativNaoDist.subfase.nome }} ({{ ativNaoDist.subfase.fase.nome }})</td>
+                            <td>{{ ativNaoDist.tarefas[0].projeto.nome }}</td>
+                            <td>{{ ativNaoDist.maxOperadores }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+        <button style="margin: 10px" type="button" class="btn btn-default" ng-click="addAtivBloco()">Adicionar atividade de bloco</button>
+    </uib-tab>
+
+
+</uib-tabset>

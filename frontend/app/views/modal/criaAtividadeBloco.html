@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <h3 class="modal-title">Cria atividade de bloco</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" role="form" name="criaAtivForm">
+        <div class="form-group">
+            <label class="control-label col-sm-2">Subfase</label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    <select ng-model="bloco.subfase.id" ng-options="subfase.id as subfase.nome for subfase in subfases" ng-change="updatemi()"> required></select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Numero máximo de operadores</label>
+            <div class="col-sm-10">
+                <input type="number" min="1" step="1" class="form-control" placeholder="Número máximo de operadores" ng-model="bloco.maxOperadores"
+                    required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">MIs</label>
+            <div class="col-sm-10">
+                <ui-select multiple ng-model="bloco.atividades" theme="bootstrap" sortable="true" close-on-select="false" style="width: 400px;" ng-disabled='disabled' required>
+                    <ui-select-match placeholder="Selecione mais de um MI">{{$item.miText}} {{$item.tarefas[0].projeto.nome}}</ui-select-match>
+                    <ui-select-choices repeat="mi in atividades | propsFilter: {miText: $select.search}">
+                        <small>
+                        {{mi.miText}} ({{mi.tarefas[0].projeto.nome}})
+                        </small>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="criaAtivForm.$invalid || bloco.atividades.length < 2" type="button" ng-click="finaliza()">Finaliza</button>
+        <button class="btn btn-default" type="button" ng-click="cancel()">Cancela</button>
+    </div>
+</div>

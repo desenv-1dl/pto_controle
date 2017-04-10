@@ -1,0 +1,36 @@
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-custom">Fases</div>
+  <div class="panel-body">
+    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-responsive">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th><span class="glyphicon glyphicon-cog" style="padding-left: 15px" aria-hidden="true"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="fase in fases">
+          <td>
+            <span editable-text="fase.nome" e-name="nome" e-form="rowform" onbeforesave="check($data, fase.id)">{{ fase.nome }}</span>
+          </td>
+          <td>
+            <form editable-form name="rowform" onaftersave="save(fase, fase.id)" oncancel="cancel(fase.nome, fase.id)" ng-show="rowform.$visible"
+              class="form-buttons form-inline" shown="inserted == fase">
+              <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+              <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+            </form>
+            <div class="buttons" ng-show="!rowform.$visible">
+              <button type="button" class="btn btn-primary" ng-click="rowform.$show()"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button style="margin: 10px" type="button" class="btn btn-default" ng-click="add()">Adicionar fase</button>
+  </div>
+</div>
+</div>

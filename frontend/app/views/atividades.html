@@ -1,0 +1,532 @@
+<!-- Atividade Produção em execução -->
+<div ng-if="atividadeProdExecucao.length > 0">
+    <div class="jumbotron" style="padding-top: 0" ng-repeat="ativ in atividadeProdExecucao">
+        <h2><strong>{{ativ.miText}}</strong></h2>
+        <h4>{{ativ.subfase.nome}} - {{ativ.tarefas[0].projeto.nome}}</h4>
+        <hr>
+        <h4><strong>Informações do projeto</strong></h4>
+        <div class="row" ng-show="ativ.tarefas[0].projeto.servidorPg">
+            <h5 class="col-sm-2">Servidor PostGIS:</h5>
+            <h5 class="col-sm-10">{{ativ.tarefas[0].projeto.servidorPg}}</h5>
+        </div>
+        <div class="row" ng-show="ativ.tarefas[0].projeto.portaPg">
+            <h5 class="col-sm-2">Porta servidor PostGIS:</h5>
+            <h5 class="col-sm-10">{{ativ.tarefas[0].projeto.portaPg}}</h5>
+        </div>
+        <div class="row" ng-show="ativ.tarefas[0].projeto.insumosPath">
+            <h5 class="col-sm-2">Pasta de insumos:</h5>
+            <h5 class="col-sm-10">{{ativ.tarefas[0].projeto.insumosPath}}</h5>
+        </div>
+        <hr>
+        <h4><strong>Informações da tarefa</strong></h4>
+        <div ng-repeat="tarefa in ativ.tarefas">
+            <h4>{{tarefa.mi}} ({{tarefa.inom}})</h4>
+            <div style="margin-bottom: 10px"><button type="button" class="btn btn-default" ng-click="tarefa.metadadosCol = !tarefa.metadadosCol"
+            ng-init="tarefa.metadadosCol = true">Metadados</button></div>
+            <div uib-collapse="tarefa.metadadosCol">
+                <div class="row">
+                    <h5 class="col-sm-2">Nome:</h5>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Nome da folha" ng-model="tarefa.nome">
+                    </div>
+                </div>
+                <div class="row" ng-show="tarefa.bdAquisicao">
+                    <h5 class="col-sm-2">Banco de dados de aquisição:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdAquisicao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdValidacao">
+                    <h5 class="col-sm-2">Banco de dados de validacao:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdValidacao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdContinuo">
+                    <h5 class="col-sm-2">Banco de dados de área contínua:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdContinuo}}</h5>
+                </div>
+                <div class="row" style="padding-top: 10px">
+                    <div class="col-sm-2 form-inline">
+                        <h5>Palavras chave:
+                            <button type="button" class="btn btn-default btn-xs" ng-click="addPalavraChave(tarefa)">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="remPalavraChave(tarefa)">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </button></h5>
+                    </div>
+                    <div class="col-sm-10 form-inline">
+                        <div style="padding-bottom: 5px" ng-repeat="palavraChave in tarefa.palavrasChave">
+                            Nome: <input type="text" class="form-control" ng-model="palavraChave.nome"> Tipo: <select ng-model="palavraChave.tipo.id"
+                                ng-options="tipoPalavraChave.id as tipoPalavraChave.nome for tipoPalavraChave in tiposPalavraChave"
+                                required></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-show="tarefa.observacao">
+                    <h5 class="col-sm-2">Observação:</h5>
+                    <h5 class="col-sm-10">{{tarefa.observacao}}</h5>
+                </div>
+            </div>
+
+            <div class="row" ng-show="tarefa.historico.length > 0">
+                <div class="col-sm-2"><button type="button" class="btn btn-default" ng-click="tarefa.historicoCol = !tarefa.historicoCol"
+                        ng-init="tarefa.historicoCol = true">Histórico</button></div>
+                <div class="col-sm-10" uib-collapse="tarefa.historicoCol">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Subfase</th>
+                                <th>Status</th>
+                                <th>Data de início</th>
+                                <th>Data de fim</th>
+                                <th>Horas trabalhadas</th>
+                                <th>Operadores</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="hist in tarefa.historico">
+                                <td>{{hist.subfase.nome}}</td>
+                                <td>{{hist.status.nome}}</td>
+                                <td>{{hist.dataInicio | date:'HH:mm:ss (dd-MM-yyyy)'}}</td>
+                                <td>{{hist.dataFim | date:'HH:mm:ss (dd-MM-yyyy)'}}</td>
+                                <td>{{hist.horasTrabalhadas}}</td>
+                                <td>{{hist.operadoresText}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <h4><strong>Informações da atividade</strong></h4>
+        <div class="row" ng-show="ativ.dataInicio">
+            <h5 class="col-sm-2">Data de início:</h5>
+            <h5 class="col-sm-10">{{ativ.dataInicio | date:'HH:mm:ss (dd-MM-yyyy)'}}</h5>
+        </div>
+        <div class="row" ng-show="ativ.horasTrabalhadas">
+            <h5 class="col-sm-2">Horas trabalhadas:</h5>
+            <h5 class="col-sm-10">{{ativ.horasTrabalhadas}}</h5>
+        </div>
+        <div class="row" ng-show="ativ.maxOperadores">
+            <h5 class="col-sm-2">Número máximo de operadores:</h5>
+            <h5 class="col-sm-10">{{ativ.maxOperadores}}</h5>
+        </div>
+        <div class="row" ng-show="ativ.operadoresText">
+            <h5 class="col-sm-2">Operadores:</h5>
+            <h5 class="col-sm-10">{{ativ.operadoresText}}</h5>
+        </div>
+        <div class="row">
+            <h5 class="col-sm-2">Observação:</h5>
+            <div class="col-sm-10">
+                <textarea class="form-control" rows="3" placeholder="Observações sobre a atividade" ng-model="ativ.observacao"></textarea>
+            </div>
+        </div>
+        <hr>
+        <div class="pull-right">
+            <button type="button" class="btn btn-default" ng-click="pausa(ativ)">
+                Pausar atividade
+            </button>
+            <button type="button" class="btn btn-default" ng-click="finaliza(ativ)">
+                Finalizar atividade
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Atividade em execução -->
+<div ng-if="atividadeExecucao.length > 0">
+    <div class="jumbotron" style="padding-top: 0">
+        <h2><strong>{{atividadeExecucao.tipo.nome}}</strong></h2>
+        <hr>
+        <div class="row">
+            <h5 class="col-sm-2">Observação:</h5>
+            <div class="col-sm-10">
+                <textarea class="form-control" rows="3" placeholder="Observações sobre a atividade" ng-model="atividadeExecucao.observacao"></textarea>
+            </div>
+        </div>
+        <hr>
+        <div class="pull-right">
+            <button type="button" class="btn btn-default" ng-click="pausaAtiv(atividadeExecucao)">
+                Pausar atividade
+            </button>
+            <button type="button" class="btn btn-default" ng-click="finalizaAtiv(atividadeExecucao)">
+                Finalizar atividade
+            </button>
+        </div>
+    </div>
+</div>
+
+<div ng-if="atividadeExecucao.length == 0 && atividadeProdExecucao.length == 0">
+
+    <!-- Atividades prod iniciadas -->
+    <div ng-if="atividadesProdIniciadas.length > 0">
+        <div class="jumbotron" style="padding-top: 0" ng-repeat="ativ in atividadesProdIniciadas">
+            <h2><strong>{{ativ.miText}}</strong></h2>
+            <h4>{{ativ.subfase.nome}} - {{ativ.tarefas[0].projeto.nome}}</h4>
+            <hr>
+            <h4><strong>Informações do projeto</strong></h4>
+            <div class="row" ng-show="ativ.tarefas[0].projeto.servidorPg">
+                <h5 class="col-sm-2">Servidor PostGIS:</h5>
+                <h5 class="col-sm-10">{{ativ.tarefas[0].projeto.servidorPg}}</h5>
+            </div>
+            <div class="row" ng-show="ativ.tarefas[0].projeto.portaPg">
+                <h5 class="col-sm-2">Porta servidor PostGIS:</h5>
+                <h5 class="col-sm-10">{{ativ.tarefas[0].projeto.portaPg}}</h5>
+            </div>
+            <div class="row" ng-show="ativ.tarefas[0].projeto.insumosPath">
+                <h5 class="col-sm-2">Pasta de insumos:</h5>
+                <h5 class="col-sm-10">{{ativ.tarefas[0].projeto.insumosPath}}</h5>
+            </div>
+            <hr>
+            <h4><strong>Informações da tarefa</strong></h4>
+            <div ng-repeat="tarefa in ativ.tarefas">
+                <h4>{{tarefa.mi}} ({{tarefa.inom}})</h4>
+                <div class="row" ng-show="tarefa.nome">
+                    <h5 class="col-sm-2">Nome:</h5>
+                    <h5 class="col-sm-10">{{tarefa.nome}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdAquisicao">
+                    <h5 class="col-sm-2">Banco de dados de aquisição:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdAquisicao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdValidacao">
+                    <h5 class="col-sm-2">Banco de dados de validacao:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdValidacao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdContinuo">
+                    <h5 class="col-sm-2">Banco de dados de área contínua:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdContinuo}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.palavrasChave.length > 0">
+                    <h5 class="col-sm-2">Palavras chave:</h5>
+                    <ul class="col-sm-10">
+                        <div ng-repeat="palavraChave in tarefa.palavrasChave">
+                            <li>
+                                <h5>{{palavraChave.nome}} ({{palavraChave.tipo.nome}}) </h5>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+                <div class="row" ng-show="tarefa.observacao">
+                    <h5 class="col-sm-2">Observação:</h5>
+                    <h5 class="col-sm-10">{{tarefa.observacao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.historico.length > 0">
+                    <div class="col-sm-2"><button type="button" class="btn btn-default" ng-click="ativ.historicoCol[$index] = !ativ.historicoCol[$index]"
+                            ng-init="ativ.historicoCol[$index] = true">Histórico</button></div>
+                    <div class="col-sm-10" uib-collapse="ativ.historicoCol[$index]">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subfase</th>
+                                    <th>Status</th>
+                                    <th>Data de início</th>
+                                    <th>Data de fim</th>
+                                    <th>Horas trabalhadas</th>
+                                    <th>Operadores</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="hist in tarefa.historico">
+                                    <td>{{hist.subfase.nome}}</td>
+                                    <td>{{hist.status.nome}}</td>
+                                    <td>{{hist.dataInicio}}</td>
+                                    <td>{{hist.dataFim}}</td>
+                                    <td>{{hist.horasTrabalhadas}}</td>
+                                    <td>{{hist.operadoresText}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h4><strong>Informações da atividade</strong></h4>
+            <div class="row" ng-show="ativ.dataInicio">
+                <h5 class="col-sm-2">Data de início:</h5>
+                <h5 class="col-sm-10">{{ativ.dataInicio | date:'HH:mm:ss (dd-MM-yyyy)'}}}}</h5>
+            </div>
+            <div class="row" ng-show="ativ.horasTrabalhadas">
+                <h5 class="col-sm-2">Horas trabalhadas:</h5>
+                <h5 class="col-sm-10">{{ativ.horasTrabalhadas}}</h5>
+            </div>
+            <div class="row" ng-show="ativ.maxOperadores">
+                <h5 class="col-sm-2">Número máximo de operadores:</h5>
+                <h5 class="col-sm-10">{{ativ.maxOperadores}}</h5>
+            </div>
+            <div class="row" ng-show="ativ.operadoresText">
+                <h5 class="col-sm-2">Operadores:</h5>
+                <h5 class="col-sm-10">{{ativ.operadoresText}}</h5>
+            </div>
+            <div class="row" ng-show="ativ.observacao">
+                <h5 class="col-sm-2">Observação:</h5>
+                <h5 class="col-sm-10">{{ativ.observacao}}</h5>
+            </div>
+            <hr>
+            <div class="pull-right">
+                <button type="button" class="btn btn-default" ng-click="inicia(ativ)">
+                Continuar atividade &raquo;
+            </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Atividades iniciadas -->
+    <div ng-if="atividadesIniciadas.length > 0">
+        <div class="jumbotron" style="padding-top: 0" ng-repeat="ativ in atividadesIniciadas">
+            <h2><strong>{{ativ.tipo.nome}}</strong></h2>
+            <h4>{{ativ.observacao}}</h4>
+            <hr>
+            <div class="pull-right">
+                <button type="button" class="btn btn-default" ng-click="iniciaAtiv(ativ)">
+                Continuar atividade &raquo;
+            </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Atividade prioritaria -->
+    <div ng-if="atividadesProdIniciadas.length == 0 && atividadesIniciadas.length == 0 && ativPriori1">
+        <div class="jumbotron" style="padding-top: 0">
+            <h2><strong>{{ativPriori1.miText}}</strong></h2>
+            <h4>{{ativPriori1.subfase.nome}} - {{ativPriori1.tarefas[0].projeto.nome}}</h4>
+            <hr>
+            <h4><strong>Informações do projeto</strong></h4>
+            <div class="row" ng-show="ativPriori1.tarefas[0].projeto.servidorPg">
+                <h5 class="col-sm-2">Servidor PostGIS:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.tarefas[0].projeto.servidorPg}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori1.tarefas[0].projeto.portaPg">
+                <h5 class="col-sm-2">Porta servidor PostGIS:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.tarefas[0].projeto.portaPg}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori1.tarefas[0].projeto.insumosPath">
+                <h5 class="col-sm-2">Pasta de insumos:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.tarefas[0].projeto.insumosPath}}</h5>
+            </div>
+            <hr>
+            <h4><strong>Informações da tarefa</strong></h4>
+            <div ng-repeat="tarefa in ativPriori1.tarefas">
+                <h4>{{tarefa.mi}} ({{tarefa.inom}})</h4>
+                <div class="row" ng-show="tarefa.nome">
+                    <h5 class="col-sm-2">Nome:</h5>
+                    <h5 class="col-sm-10">{{tarefa.nome}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdAquisicao">
+                    <h5 class="col-sm-2">Banco de dados de aquisição:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdAquisicao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdValidacao">
+                    <h5 class="col-sm-2">Banco de dados de validacao:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdValidacao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdContinuo">
+                    <h5 class="col-sm-2">Banco de dados de área contínua:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdContinuo}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.palavrasChave.length > 0">
+                    <h5 class="col-sm-2">Palavras chave:</h5>
+                    <ul class="col-sm-10">
+                        <div ng-repeat="palavraChave in tarefa.palavrasChave">
+                            <li>
+                                <h5>{{palavraChave.nome}} ({{palavraChave.tipo.nome}}) </h5>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+                <div class="row" ng-show="tarefa.observacao">
+                    <h5 class="col-sm-2">Observação:</h5>
+                    <h5 class="col-sm-10">{{tarefa.observacao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.historico.length > 0">
+                    <div class="col-sm-2"><button type="button" class="btn btn-default" ng-click="ativPriori1.historicoCol[$index] = !ativPriori1.historicoCol[$index]"
+                            ng-init="ativPriori1.historicoCol[$index] = true">Histórico</button></div>
+                    <div class="col-sm-10" uib-collapse="ativPriori1.historicoCol[$index]">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subfase</th>
+                                    <th>Status</th>
+                                    <th>Data de início</th>
+                                    <th>Data de fim</th>
+                                    <th>Horas trabalhadas</th>
+                                    <th>Operadores</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="hist in tarefa.historico">
+                                    <td>{{hist.subfase.nome}}</td>
+                                    <td>{{hist.status.nome}}</td>
+                                    <td>{{hist.dataInicio}}</td>
+                                    <td>{{hist.dataFim}}</td>
+                                    <td>{{hist.horasTrabalhadas}}</td>
+                                    <td>{{hist.operadoresText}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h4><strong>Informações da atividade</strong></h4>
+            <div class="row" ng-show="ativPriori1.dataInicio">
+                <h5 class="col-sm-2">Data de início:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.dataInicio | date:'HH:mm:ss (dd-MM-yyyy)'}}}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori1.horasTrabalhadas">
+                <h5 class="col-sm-2">Horas trabalhadas:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.horasTrabalhadas}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori1.maxOperadores">
+                <h5 class="col-sm-2">Número máximo de operadores:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.maxOperadores}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori1.operadoresText">
+                <h5 class="col-sm-2">Operadores:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.operadoresText}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori1.observacao">
+                <h5 class="col-sm-2">Observação:</h5>
+                <h5 class="col-sm-10">{{ativPriori1.observacao}}</h5>
+            </div>
+            <hr>
+            <div class="pull-right">
+                <button type="button" class="btn btn-default" ng-click="inicia(ativPriori1)">
+                Iniciar atividade &raquo;
+            </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Segunda Atividade prioritaria -->
+    <div ng-if="mostraSegundaAtiv && ativPriori2">
+        <div class="jumbotron" style="padding-top: 0">
+            <h2><strong>{{ativPriori2.miText}}</strong></h2>
+            <h4>{{ativPriori2.subfase.nome}} - {{ativPriori2.tarefas[0].projeto.nome}}</h4>
+            <hr>
+            <h4><strong>Informações do projeto</strong></h4>
+            <div class="row" ng-show="ativPriori2.tarefas[0].projeto.servidorPg">
+                <h5 class="col-sm-2">Servidor PostGIS:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.tarefas[0].projeto.servidorPg}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori2.tarefas[0].projeto.portaPg">
+                <h5 class="col-sm-2">Porta servidor PostGIS:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.tarefas[0].projeto.portaPg}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori2.tarefas[0].projeto.insumosPath">
+                <h5 class="col-sm-2">Pasta de insumos:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.tarefas[0].projeto.insumosPath}}</h5>
+            </div>
+            <hr>
+            <h4><strong>Informações da tarefa</strong></h4>
+            <div ng-repeat="tarefa in ativPriori2.tarefas">
+                <h4>{{tarefa.mi}} ({{tarefa.inom}})</h4>
+                <div class="row" ng-show="tarefa.nome">
+                    <h5 class="col-sm-2">Nome:</h5>
+                    <h5 class="col-sm-10">{{tarefa.nome}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdAquisicao">
+                    <h5 class="col-sm-2">Banco de dados de aquisição:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdAquisicao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdValidacao">
+                    <h5 class="col-sm-2">Banco de dados de validacao:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdValidacao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.bdContinuo">
+                    <h5 class="col-sm-2">Banco de dados de área contínua:</h5>
+                    <h5 class="col-sm-10">{{tarefa.bdContinuo}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.palavrasChave.length > 0">
+                    <h5 class="col-sm-2">Palavras chave:</h5>
+                    <ul class="col-sm-10">
+                        <div ng-repeat="palavraChave in tarefa.palavrasChave">
+                            <li>
+                                <h5>{{palavraChave.nome}} ({{palavraChave.tipo.nome}}) </h5>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+                <div class="row" ng-show="tarefa.observacao">
+                    <h5 class="col-sm-2">Observação:</h5>
+                    <h5 class="col-sm-10">{{tarefa.observacao}}</h5>
+                </div>
+                <div class="row" ng-show="tarefa.historico.length > 0">
+                    <div class="col-sm-2"><button type="button" class="btn btn-default" ng-click="ativPriori2.historicoCol[$index] = !ativPriori2.historicoCol[$index]"
+                            ng-init="ativPriori2.historicoCol[$index] = true">Histórico</button></div>
+                    <div class="col-sm-10" uib-collapse="ativPriori2.historicoCol[$index]">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subfase</th>
+                                    <th>Status</th>
+                                    <th>Data de início</th>
+                                    <th>Data de fim</th>
+                                    <th>Horas trabalhadas</th>
+                                    <th>Operadores</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="hist in tarefa.historico">
+                                    <td>{{hist.subfase.nome}}</td>
+                                    <td>{{hist.status.nome}}</td>
+                                    <td>{{hist.dataInicio}}</td>
+                                    <td>{{hist.dataFim}}</td>
+                                    <td>{{hist.horasTrabalhadas}}</td>
+                                    <td>{{hist.operadoresText}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h4><strong>Informações da atividade</strong></h4>
+            <div class="row" ng-show="ativPriori2.dataInicio">
+                <h5 class="col-sm-2">Data de início:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.dataInicio | date:'HH:mm:ss (dd-MM-yyyy)'}}}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori2.horasTrabalhadas">
+                <h5 class="col-sm-2">Horas trabalhadas:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.horasTrabalhadas}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori2.maxOperadores">
+                <h5 class="col-sm-2">Número máximo de operadores:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.maxOperadores}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori2.operadoresText">
+                <h5 class="col-sm-2">Operadores:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.operadoresText}}</h5>
+            </div>
+            <div class="row" ng-show="ativPriori2.observacao">
+                <h5 class="col-sm-2">Observação:</h5>
+                <h5 class="col-sm-10">{{ativPriori2.observacao}}</h5>
+            </div>
+            <hr>
+            <div class="pull-right">
+                <button type="button" class="btn btn-default" ng-click="inicia(ativPriori2)">
+                Iniciar atividade &raquo;
+            </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sem atividades -->
+    <div ng-if="atividadesProdIniciadas.length == 0 && atividadesIniciadas.length == 0 && !ativPriori1 && !ativPriori2">
+        <div class="jumbotron" style="padding-top: 0">
+            <h2><strong>Sem atividades distribuídas</strong></h2>
+            <h4>Verificar com o gerente de projeto</h4>
+        </div>
+    </div>
+
+    <div class="pull-right">
+        <button type="button" class="btn btn-default" ng-click="mostraSegundaAtiv = !mostraSegundaAtiv" ng-init="mostraSegundaAtiv = false"
+            ng-show="ativPriori2">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-right: 5px"></span> {{mostraSegundaAtiv ? "Remove próxima ativiadade de produção" : " Exibe próxima atividade de produção"}}
+    </button>
+
+        <button type="button" class="btn btn-default" ng-click="criaAtiv()">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-right: 5px"></span> Adiciona outras atividades
+    </button>
+    </div>
+
+</div>
