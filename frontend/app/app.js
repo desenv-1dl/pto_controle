@@ -8,7 +8,8 @@
   //  datatables / datatables.bootstrap - https://l-lin.github.io/angular-datatables/#/angularWay
   //  ui.select https://github.com/angular-ui/ui-
   //  ngStorage https://github.com/gsklee/ngStorage
-  var app = angular.module('ptoApp', ['ui.bootstrap', 'ngRoute', 'ngMessages', 'cgBusy', 'xeditable', 'datatables', 'datatables.bootstrap', 'ui.select', 'ngStorage', 'nemLogging', 'ui-leaflet']);
+  var app = angular.module('ptoApp', ['ui.bootstrap', 'ngRoute', 'ngMessages', 'cgBusy', 'xeditable', 'datatables', 
+                           'datatables.bootstrap', 'ui.select', 'ngStorage', 'nemLogging', 'ui-leaflet']);
 
   app.config(function ($routeProvider) {
     $routeProvider
