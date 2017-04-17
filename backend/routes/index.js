@@ -74,6 +74,9 @@
     operations.get.pontosControle(req, res, next)
   })
 
+  router.get('/usuarios', function (req, res, next) {
+    operations.get.usuarios(req, res, next)
+  })
 
   //  pto_controle - insere um ou mais pontos de controle
   router.post('/pontoscontrole', jsonParser, function (req, res, next) {
@@ -84,6 +87,14 @@
   //  pto_controle - atualiza um ponto de controle determinado pelo codponto
   router.put('/pontoscontrole/:codponto', jsonParser, function (req, res, next) {
     operations.put.pontosControle(req, res, next, req.body, req.params.codponto)
+  })
+
+  router.put('/usuarios/:id/senha', jsonParser, function (req, res, next) {
+    operations.put.usuariosSenha(req, res, next, req.body, req.params.id)
+  })
+
+  router.put('/usuarios/:id', jsonParser, function (req, res, next) {
+    operations.put.usuarios(req, res, next, req.body, req.params.id)
   })
 
   module.exports = router

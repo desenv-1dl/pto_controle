@@ -303,14 +303,8 @@
       })
   }
 
-  //  ?funcao = XX
   //  ?id = XX
-  //  retorna {id: Integer, login: String, nome: String, nomeGuerra: String, secao: {id: Integer, nome: String}, turno: {id: Integer, nome: String},
-  //         postoGrad: {id: Integer, nome: String}, perfil: {id: Integer, nome: String},
-  //         funcoes: [{id: Integer, nome: String}], gerencia: [{id: Integer, nome: String}] }
   get.usuarios = function (req, res, next) {
-    var sdtData
-    var controleData
 
     dbSdt.any('SELECT u.id, u.nome, u.nome_guerra, u.login, s.nome AS secao_nome, s.id AS secao_id, t.nome AS turno_nome, t.id AS turno_id, ' +
         ' p.nome_abrev AS posto_grad_nome, p.id AS posto_grad_id' +
@@ -318,24 +312,9 @@
         ' INNER JOIN turno AS t ON t.id = u.turno_id' +
         ' INNER JOIN posto_grad AS p ON p.id = u.posto_grad_id')
       .then(function (data) {
-        sdtData = data
-        return dbControle.task(function (t) {
-          return t.batch([
-            t.any('SELECT su.usuario_id, s.nome AS subfase_nome, s.id AS subfase_id, f.id AS fase_id, f.nome AS fase_nome' +
-              ' FROM subfase_usuario as su INNER JOIN subfase AS s ON su.subfase_id = s.id' +
-              ' INNER JOIN fase AS f ON f.id = s.fase_id'),
-            t.any('SELECT sg.usuario_id, s.nome AS subfase_nome, s.id AS subfase_id, f.id AS fase_id, f.nome AS fase_nome' +
-              ' FROM subfase_gerente as sg INNER JOIN subfase AS s ON sg.subfase_id = s.id' +
-              ' INNER JOIN fase AS f ON f.id = s.fase_id'),
-            t.any('SELECT u.usuario_id, t.id AS perfil_id, t.nome AS perfil_nome FROM usuario_perfil AS u INNER JOIN tipo_perfil AS t ON t.id = u.tipo_perfil_id')
-          ])
-        })
-      })
-      .then(function (data) {
-        controleData = data
         var result = []
 
-        sdtData.forEach(function (u) {
+        data.forEach(function (u) {
           var aux = {
             id: u.id,
             nome: u.nome,
@@ -354,56 +333,8 @@
               nome: u.posto_grad_nome
             }
           }
-
-          aux.perfil = {}
-          aux.funcoes = []
-          aux.gerencia = []
-
-          controleData[0].forEach(function (f) {
-            if (u.id === f.usuario_id) {
-              aux.funcoes.push({
-                id: f.subfase_id,
-                nome: f.subfase_nome,
-                fase: {
-                  id: f.fase_id,
-                  nome: f.fase_nome
-                }
-              })
-            }
-          })
-
-          controleData[2].forEach(function (f) {
-            if (u.id === f.usuario_id) {
-              aux.perfil = {
-                id: f.perfil_id,
-                nome: f.perfil_nome
-              }
-            }
-          })
-
-          controleData[1].forEach(function (f) {
-            if (u.id === f.usuario_id) {
-              aux.gerencia.push({
-                id: f.subfase_id,
-                nome: f.subfase_nome,
-                fase: {
-                  id: f.fase_id,
-                  nome: f.fase_nome
-                }
-              })
-            }
-          })
-
           result.push(aux)
         })
-
-        if (req.query.funcao !== undefined) {
-          result = result.filter(function (d) {
-            return d.funcoes.filter(function (f) {
-              return f.id.toString() === req.query.funcao
-            }).length > 0
-          })
-        }
 
         if (req.query.id !== undefined) {
           result = result.filter(function (d) {
@@ -1502,7 +1433,7 @@
       })
   }
 
-  //  expects {nome, nomeGuerra, login, secao: {id}, turno: {id}, postoGrad: {id}, perfil: {id}}
+  //  expects {nome, nomeGuerra, login, secao: {id}, turno: {id}, postoGrad: {id},}
   put.usuarios = function (req, res, next, body, id) {
     //  não da update na senha
 
@@ -1535,18 +1466,12 @@
 
     query = query + queryVariables.join(', ') + ' WHERE id = ' + body.id
 
-    console.log(query)
-
     dbSdt.result({
         text: query
       })
       .then(function (result) {
         if (result.rowCount > 0) {
-          if (body.perfil && body.perfil.id) {
-            return dbControle.none('UPDATE usuario_perfil SET tipo_perfil_id = $1 WHERE usuario_id = $2', [body.perfil.id, id])
-          } else {
-            return
-          }
+            return true;
         } else {
           var err = new Error('id não encontrado')
           err.status = 404
